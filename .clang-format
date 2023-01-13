@@ -1,0 +1,23 @@
+---
+# https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+# customized using https://zed0.co.uk/clang-format-configurator/
+---
+BasedOnStyle: 'Google'
+AlignOperands: 'true'
+AlignAfterOpenBracket: 'Align'
+AllowAllParametersOfDeclarationOnNextLine: 'true'
+AlignAfterOpenBracket: 'BlockIndent'
+AllowShortBlocksOnASingleLine: 'false'
+AllowShortCaseLabelsOnASingleLine: 'false'
+AllowShortIfStatementsOnASingleLine: 'false'
+AllowShortLoopsOnASingleLine: 'false'
+AlwaysBreakTemplateDeclarations: 'Yes'
+BinPackParameters: 'false'
+BinPackArguments: 'false'
+BreakBeforeBinaryOperators: 'All'
+FixNamespaceComments: 'true'
+IndentWidth: '4'
+IncludeBlocks: 'Preserve'
+PointerAlignment: 'Left'
+Standard: 'Cpp11'
+UseTab: 'Never'

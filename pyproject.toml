@@ -1,0 +1,59 @@
+[build-system]
+requires = [
+    "pybind11>=2.8.1",
+    "scikit-build-core",
+]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "mmu"
+version = "0.1.0"
+authors = [
+    { name="Ralph Urlus", email="rurlus.dev@gmail.com" },
+]
+description = ""
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = ["numpy>=1.18",]
+
+[project.optional-dependencies]
+dev = [
+    "ninja",
+    "cmake>=1.1",
+    "pybind11>=2.8.1",
+]
+
+test = [
+    "pytest",
+]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q -v"
+testpaths = ["tests", ]
+
+[tool.scikit-build]
+minimum-version = "0.1"
+cmake.minimum-version = "3.16"
+ninja.make-fallback = true
+
+# This activates verbose builds
+cmake.verbose = false
+
+# This controls the CMake build type
+cmake.build-type = "Release"
+logging.level = "WARNING"
+
+sdist.reproducible = true
+sdist.include = ["src/mmu-core", "cmake", "CMakeLists.txt"]
+wheel.py-api = "cp37"
+wheel.expand-macos-universal-tags = false
+backport.find-python = "3.24"
+strict-config = true
+
+[tool.scikit-build.cmake.define]
+MMU_CPP_STANDARD = "17"
+MMU_ENABLE_DEVMODE = false
+MMU_ADD_PYTHON_SUPPORT = false
+MMU_ADD_NUMPY_SUPPORT = false
+MMU_ADD_OPENMP_SUPPORT = false
