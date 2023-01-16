@@ -52,7 +52,7 @@ backport.find-python = "3.24"
 strict-config = true
 
 [tool.scikit-build.cmake.define]
-MMU_CPP_STANDARD = "17"
+MMU_CPP_STANDARD = "14"
 MMU_ENABLE_DEVMODE = false
 MMU_ADD_PYTHON_SUPPORT = false
 MMU_ADD_NUMPY_SUPPORT = false
