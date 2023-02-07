@@ -55,6 +55,38 @@ class MultnPll {
     double operator()(const double prec, const double rec);
 };
 
+void multn_pll_scores(
+    const int_vt* __restrict conf_mat,
+    const int_vt n_bins,
+    const double n_sigmas,
+    const double epsilon,
+    double* __restrict bounds,
+    double* __restrict scores
+);
+
+void multn_pll_grid_scores(
+    const int_vt* __restrict conf_mat,
+    const double* __restrict prec_grid,
+    const double* __restrict rec_grid,
+    const int_vt n_prec_bins,
+    const int_vt n_rec_bins,
+    const double n_sigmas,
+    const double epsilon,
+    double* __restrict scores
+);
+#ifdef MMU_HAS_OPENMP_SUPPORT
+
+void multn_pll_scores_mt(
+    const int_vt* __restrict conf_mat,
+    const int_vt n_bins,
+    const double n_sigmas,
+    const double epsilon,
+    const int n_threads,
+    double* __restrict bounds,
+    double* __restrict scores
+);
+#endif  // MMU_HAS_OPENMP_SUPPORT
+
 }  // namespace pr
 }  // namespace core
 }  // namespace mmu
