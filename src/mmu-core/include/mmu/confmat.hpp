@@ -20,7 +20,7 @@ namespace core {
  *  actual  0    TN    FP
  *          1    FN    TP
  *
- *  Flattened, implies C-contiguous, we have:
+ *  Flattened, implies C-contiguous, we have: TN FP FN TP
  */
 
 /* True Negative Index of confusion matrix*/
@@ -50,12 +50,12 @@ constexpr int TPI = 3;
  */
 template <typename T1, typename T2, isInt<T1> = true, isInt<T2> = true>
 inline void confusion_matrix(
-    const int64_t n_obs,
+    const int_vt n_obs,
     const T1* __restrict y,
     const T2* __restrict yhat,
-    int64_t* __restrict const conf_mat
+    int_vt* __restrict const conf_mat
 ) {
-    for (int64_t i = 0; i < n_obs; i++) {
+    for (int_vt i = 0; i < n_obs; i++) {
         conf_mat[static_cast<bool>(*y) * 2 + static_cast<bool>(*yhat)]++;
         yhat++;
         y++;
@@ -81,14 +81,14 @@ inline void confusion_matrix(
  */
 template <typename T1, typename T2, isInt<T1> = true, isFloat<T2> = true>
 inline void confusion_matrix(
-    const int64_t n_obs,
+    const int_vt n_obs,
     const T1* __restrict y,
     const T2* __restrict score,
     const T2 threshold,
-    int64_t* __restrict const conf_mat
+    int_vt* __restrict const conf_mat
 ) {
     const double scaled_tol = GEQ_ATOL + GEQ_RTOL * threshold;
-    for (int64_t i = 0; i < n_obs; i++) {
+    for (int_vt i = 0; i < n_obs; i++) {
         conf_mat
             [static_cast<bool>(*y) * 2
              + geq_tol(*score, threshold, scaled_tol)]++;

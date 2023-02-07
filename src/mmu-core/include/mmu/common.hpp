@@ -32,6 +32,12 @@ typedef SSIZE_T ssize_t;
 
 namespace mmu {
 
+#if defined(MMU_USE_INT64)
+using int_vt = int_fast64_t;
+#else
+using int_vt = int_fast32_t;
+#endif
+
 template <typename T>
 using isInt = std::enable_if_t<std::is_integral<T>::value, bool>;
 
