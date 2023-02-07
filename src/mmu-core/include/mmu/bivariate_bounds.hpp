@@ -129,5 +129,27 @@ inline void find_marginal_bounds(
     }
     bound_idxs[1] = idx_max <= n_bins ? idx_max : n_bins;
 }
+
+namespace pr {
+
+void get_prec_rec_bounds(
+    const int_vt* __restrict conf_mat,
+    const double n_sigmas,
+    const double epsilon,
+    double* __restrict bounds
+);
+
+void find_prec_rec_bound_idxs(
+    const int_vt* __restrict conf_mat,
+    const double* __restrict prec_grid,
+    const double* __restrict rec_grid,
+    const int_vt n_prec_bins,
+    const int_vt n_rec_bins,
+    const double n_sigmas,
+    const double epsilon,
+    int_vt* __restrict bound_idxs
+);
+
+}  // namespace pr
 }  // namespace core
 }  // namespace mmu
