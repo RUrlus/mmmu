@@ -3,9 +3,7 @@
  */
 #include <mmu/multn_profile.hpp>
 
-namespace mmu {
-namespace core {
-namespace pr {
+namespace mmu::core::pr {
 
 MultnPll::MultnPll() = default;
 MultnPll::MultnPll(const int_vt* __restrict cm)
@@ -244,6 +242,4 @@ void multn_pll_scores_mt(
 
 #endif  // MMU_HAS_OPENMP_SUPPORT
 
-}  // namespace pr
-}  // namespace core
-}  // namespace mmu
+}  // namespace mmu::core::pr

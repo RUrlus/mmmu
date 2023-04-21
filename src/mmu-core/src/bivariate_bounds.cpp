@@ -1,8 +1,6 @@
 #include <mmu/bivariate_bounds.hpp>
 
-namespace mmu {
-namespace core {
-namespace pr {
+namespace mmu::core::pr {
 
 void get_prec_rec_bounds(
     const int_vt* __restrict conf_mat,
@@ -37,3 +35,4 @@ void find_prec_rec_bound_idxs(
 }  // namespace pr
 }  // namespace core
 }  // namespace mmu
+}  // namespace mmu::core::pr

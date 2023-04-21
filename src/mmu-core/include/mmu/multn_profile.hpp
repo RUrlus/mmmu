@@ -19,9 +19,7 @@
 #include <mmu/common.hpp>
 #include <mmu/confmat.hpp>
 
-namespace mmu {
-namespace core {
-namespace pr {
+namespace mmu::core::pr {
 
 class MultnPll {
     int64_t i_n3;
@@ -87,6 +85,4 @@ void multn_pll_scores_mt(
 );
 #endif  // MMU_HAS_OPENMP_SUPPORT
 
-}  // namespace pr
-}  // namespace core
-}  // namespace mmu
+}  // namespace mmu::core::pr

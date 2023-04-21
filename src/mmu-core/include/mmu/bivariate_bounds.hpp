@@ -12,8 +12,7 @@
 #include <mmu/common.hpp>
 #include <mmu/confmat.hpp>
 
-namespace mmu {
-namespace core {
+namespace mmu::core {
 
 /**
  * \brief Compute mean and standard deviations for a metric accounting for edge
@@ -151,5 +150,4 @@ void find_prec_rec_bound_idxs(
 );
 
 }  // namespace pr
-}  // namespace core
-}  // namespace mmu
+}  // namespace mmu::core
