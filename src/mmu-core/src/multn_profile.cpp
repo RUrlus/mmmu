@@ -23,7 +23,7 @@ MultnPll::MultnPll(const int_vt* __restrict cm)
           * (xlogy(x_tn, p_tn) + xlogy(x_fp, p_fp) + xlogy(x_fn, p_fn)
              + xlogy(x_tp, p_tp))} {}
 
-void MultnPll::set_conf_mat(const int64_t* __restrict cm) {
+void MultnPll::set_conf_mat(const int_vt* __restrict cm) {
     i_n3 = cm[1] + cm[2] + cm[3];
     n3 = static_cast<double>(i_n3);
     n = static_cast<double>(i_n3 + cm[0]);

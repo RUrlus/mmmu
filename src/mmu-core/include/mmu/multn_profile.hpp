@@ -22,7 +22,7 @@
 namespace mmu::core::pr {
 
 class MultnPll {
-    int64_t i_n3;
+    int_vt i_n3;
     double n3;
     double n;
     double x_tn;
@@ -47,7 +47,7 @@ class MultnPll {
    public:
     explicit MultnPll();
     explicit MultnPll(const int_vt* __restrict cm);
-    void set_conf_mat(const int64_t* __restrict cm);
+    void set_conf_mat(const int_vt* __restrict cm);
     void set_precision(const double prec);
     double operator()(const double rec);
     double operator()(const double prec, const double rec);
