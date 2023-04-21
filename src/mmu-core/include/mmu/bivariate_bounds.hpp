@@ -29,9 +29,11 @@ namespace mmu::core {
  * \param[out] sigma the bounded standard deviation
  */
 template <int x_idx, int y_idx>
-inline void bvn_marginal_mu_sigma_for_bounds(
-    const int_vt* __restrict const conf_mat, double& mu, double& sigma
+inline std::pair<double, double> bvn_marginal_mu_sigma_for_bounds(
+    const int_vt* __restrict const conf_mat
 ) {
+    double mu;
+    double sigma;
     double metric_for_sigma;
     const auto pair_sum
         = static_cast<double>(conf_mat[x_idx] + conf_mat[y_idx]);
@@ -53,6 +55,7 @@ inline void bvn_marginal_mu_sigma_for_bounds(
         sigma
             = std::sqrt((metric_for_sigma * (1 - metric_for_sigma)) / pair_sum);
     }
+    return std::make_pair(mu, sigma);
 }  // bvn_marginal_mu_sigma_for_bounds
 
 /**
@@ -66,19 +69,18 @@ inline void bvn_marginal_mu_sigma_for_bounds(
  * \param[out] bounds the lower and upper bounds
  */
 template <int x_idx, int y_idx>
-inline void get_marginal_bounds(
+inline std::pair<double, double> get_marginal_bounds(
     const int_vt* __restrict conf_mat,
     const double n_sigmas,
-    const double epsilon,
-    double* __restrict bounds
+    const double epsilon
 ) {
-    double mu;
-    double sigma;
-    bvn_marginal_mu_sigma_for_bounds<x_idx, y_idx>(conf_mat, mu, sigma);
+    auto [mu, sigma] = bvn_marginal_mu_sigma_for_bounds<x_idx, y_idx>(conf_mat);
     const double upper_epsilon = conf_mat[x_idx] == 0 ? 1.0 : 1.0 - epsilon;
     const double scaled_sigma = n_sigmas * sigma;
-    bounds[0] = std::min(mu + scaled_sigma, upper_epsilon);
-    bounds[1] = std::max(mu - scaled_sigma, epsilon);
+    return std::make_pair(
+        std::min(mu + scaled_sigma, upper_epsilon),
+        std::max(mu - scaled_sigma, epsilon)
+    );
 }
 
 /**
@@ -94,59 +96,53 @@ inline void get_marginal_bounds(
  * \param[out] bound_idxs the index of the lower and upper bound in `vals`
  */
 template <int x_idx, int y_idx>
-inline void find_marginal_bounds(
+inline std::pair<int_vt, int_vt> find_marginal_bounds(
     const int_vt* __restrict conf_mat,
     const double* __restrict vals,
     const int_vt n_bins,
     const double n_sigmas,
-    const double epsilon,
-    int_vt* __restrict bound_idxs
+    const double epsilon
 ) {
-    std::array<double, 2> bounds;
-    // set min_prec, max_prec in bounds
-    get_marginal_bounds<x_idx, y_idx>(
-        conf_mat, n_sigmas, epsilon, bounds.data()
-    );
+    // set min_, max_ in bounds
+    const auto [min_val, max_val]
+        = get_marginal_bounds<x_idx, y_idx>(conf_mat, n_sigmas, epsilon);
 
     int_vt idx_min = 0;
     int_vt idx_max = n_bins;
 
     for (int_vt i = 0; i < n_bins; i++) {
-        if (bounds[0] < vals[i]) {
+        if (min_val < vals[i]) {
             idx_min = i - 1;
             break;
         }
     }
     idx_min = idx_min > 0 ? idx_min : 0;
-    bound_idxs[0] = idx_min;
 
     for (int_vt i = idx_min; i < n_bins; i++) {
-        if (bounds[1] < vals[i]) {
+        if (max_val < vals[i]) {
             idx_max = i + 1;
             break;
         }
     }
-    bound_idxs[1] = idx_max <= n_bins ? idx_max : n_bins;
+    return std::make_pair(idx_min, idx_max <= n_bins ? idx_max : n_bins);
 }
 
 namespace pr {
 
-void get_prec_rec_bounds(
+auto get_prec_rec_bounds(
     const int_vt* __restrict conf_mat,
     const double n_sigmas,
-    const double epsilon,
-    double* __restrict bounds
+    const double epsilon
 );
 
-void find_prec_rec_bound_idxs(
+auto find_prec_rec_bound_idxs(
     const int_vt* __restrict conf_mat,
     const double* __restrict prec_grid,
     const double* __restrict rec_grid,
     const int_vt n_prec_bins,
     const int_vt n_rec_bins,
     const double n_sigmas,
-    const double epsilon,
-    int_vt* __restrict bound_idxs
+    const double epsilon
 );
 
 }  // namespace pr
