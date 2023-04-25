@@ -8,6 +8,7 @@
 #include <cinttypes>
 #include <cmath>
 #include <limits>
+#include <tuple>
 
 #include <mmu/common.hpp>
 #include <mmu/confmat.hpp>
@@ -96,7 +97,7 @@ inline std::pair<double, double> get_marginal_bounds(
  * \param[out] bound_idxs the index of the lower and upper bound in `vals`
  */
 template <int x_idx, int y_idx>
-inline std::pair<int_vt, int_vt> find_marginal_bounds(
+inline std::pair<int_vt, int_vt> find_marginal_bound_indexes(
     const int_vt* __restrict conf_mat,
     const double* __restrict vals,
     const int_vt n_bins,
@@ -129,13 +130,24 @@ inline std::pair<int_vt, int_vt> find_marginal_bounds(
 
 namespace pr {
 
-auto get_prec_rec_bounds(
+inline auto get_bounds(
     const int_vt* __restrict conf_mat,
     const double n_sigmas,
     const double epsilon
-);
+) {
+    // set min_prec, max_prec
+    auto [min_prec, max_prec]
+        = get_marginal_bounds<FPI, TPI>(conf_mat, n_sigmas, epsilon);
+    // set min_rec, max_rec
+    auto [min_rec, max_rec]
+        = get_marginal_bounds<FNI, TPI>(conf_mat, n_sigmas, epsilon);
+    struct bounds {
+        double min_prec, max_prec, min_rec, max_rec;
+    };
+    return bounds{min_prec, max_prec, min_rec, max_rec};
+}
 
-auto find_prec_rec_bound_idxs(
+inline auto find_bound_idexes(
     const int_vt* __restrict conf_mat,
     const double* __restrict prec_grid,
     const double* __restrict rec_grid,
@@ -143,7 +155,67 @@ auto find_prec_rec_bound_idxs(
     const int_vt n_rec_bins,
     const double n_sigmas,
     const double epsilon
-);
+) {
+    auto [idx_min_prec, idx_max_prec] = find_marginal_bound_indexes<FPI, TPI>(
+        conf_mat, prec_grid, n_prec_bins, n_sigmas, epsilon
+    );
+    auto [idx_min_rec, idx_max_rec] = find_marginal_bound_indexes<FNI, TPI>(
+        conf_mat, rec_grid, n_rec_bins, n_sigmas, epsilon
+    );
+
+    struct indexes {
+        int_vt prec_lb, prec_ub, rec_lb, rec_ub;
+    };
+    return indexes{idx_min_prec, idx_max_prec, idx_min_rec, idx_max_rec};
+}
+
+class GridBounds {
+    int n_bins;
+    const int n_prec_bins;
+    const int n_rec_bins;
+
+    // -- params recycled during computation --
+    int_vt idx_min;
+    int_vt idx_max;
+
+    double mu;
+    double sigma;
+    double upper_epsilon;
+    double scaled_sigma;
+    double max_clip;
+    double min_val;
+    double max_val;
+    // --
+    const double n_sigmas;
+    const double epsilon;
+
+    const double* precs;
+    const double* recs;
+    const double* vals;
+
+    template <int x_idx, int y_idx>
+    void find_marginal_bound_indexes(const int_vt* conf_mat);
+    template <int x_idx, int y_idx>
+    void get_marginal_bounds(const int_vt* conf_mat);
+
+   public:
+    int_vt idx_min_prec = 0;
+    int_vt idx_max_prec = 0;
+    int_vt idx_min_rec = 0;
+    int_vt idx_max_rec = 0;
+
+    GridBounds(
+        const int n_prec_bins,
+        const int n_rec_bins,
+        const double n_sigmas,
+        const double epsilon,
+        const double* __restrict precs,
+        const double* __restrict recs
+    );
+
+    void get_bounds(const int_vt* __restrict conf_mat);
+    void find_bound_indexes(const int_vt* __restrict conf_mat);
+};
 
 }  // namespace pr
 }  // namespace mmu::core
