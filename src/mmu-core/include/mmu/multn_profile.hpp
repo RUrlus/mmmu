@@ -72,6 +72,19 @@ void multn_pll_grid_scores(
     const double epsilon,
     double* __restrict scores
 );
+
+void multn_pll_grid_curve_scores(
+    const int_vt* __restrict conf_mat,
+    const double* __restrict prec_grid,
+    const double* __restrict rec_grid,
+    const int_vt n_conf_mats,
+    const int_vt n_prec_bins,
+    const int_vt n_rec_bins,
+    const double n_sigmas,
+    const double epsilon,
+    double* __restrict scores
+);
+
 #ifdef MMU_HAS_OPENMP_SUPPORT
 
 void multn_pll_scores_mt(
@@ -81,6 +94,19 @@ void multn_pll_scores_mt(
     const double epsilon,
     const int n_threads,
     double* __restrict bounds,
+    double* __restrict scores
+);
+
+void multn_pll_grid_curve_scores_mt(
+    const int_vt* __restrict conf_mat,
+    const double* __restrict prec_grid,
+    const double* __restrict rec_grid,
+    const int_vt n_conf_mats,
+    const int_vt n_prec_bins,
+    const int_vt n_rec_bins,
+    const double n_sigmas,
+    const double epsilon,
+    const int n_threads,
     double* __restrict scores
 );
 #endif  // MMU_HAS_OPENMP_SUPPORT
