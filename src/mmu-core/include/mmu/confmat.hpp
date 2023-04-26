@@ -22,15 +22,6 @@ namespace mmu::core {
  *  Flattened, implies C-contiguous, we have: TN FP FN TP
  */
 
-/* True Negative Index of confusion matrix*/
-constexpr int TNI = 0;
-/* True Positive Index of confusion matrix*/
-constexpr int FPI = 1;
-/* False Negative Index of confusion matrix*/
-constexpr int FNI = 2;
-/* True Positive Index of confusion matrix*/
-constexpr int TPI = 3;
-
 /**
  * \brief Fill confusion matrix based on true labels y and estimated
  * classifier scores
