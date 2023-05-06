@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16...3.25)
 project(
-  ${SKBUILD_PROJECT_NAME}
+  mmu
   VERSION ${SKBUILD_PROJECT_VERSION}
   LANGUAGES CXX)
 set(CMAKE_MODULE_PATH_SAVED ${CMAKE_MODULE_PATH})
@@ -50,8 +50,7 @@ if(MMU_ADD_NUMPY_SUPPORT)
 endif()
 if(MMU_ADD_OPENMP_SUPPORT)
   find_package(OpenMP REQUIRED)
-  target_compile_definitions(${MNAME}
-                             PRIVATE ${PROJECT_NAME}_HAS_OPENMP_SUPPORT=TRUE)
+  target_compile_definitions(${MNAME} PRIVATE MMU_HAS_OPENMP_SUPPORT=true)
   target_link_libraries(${MNAME} PRIVATE OpenMP::OpenMP_CXX)
 endif()
 
