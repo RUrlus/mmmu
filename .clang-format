@@ -4,7 +4,6 @@
 ---
 BasedOnStyle: 'Google'
 AlignOperands: 'true'
-AlignAfterOpenBracket: 'Align'
 AllowAllParametersOfDeclarationOnNextLine: 'true'
 AlignAfterOpenBracket: 'BlockIndent'
 AllowShortBlocksOnASingleLine: 'false'
