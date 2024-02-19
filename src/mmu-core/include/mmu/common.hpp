@@ -54,6 +54,16 @@ constexpr int FPI = 1;
 constexpr int FNI = 2;
 /* True Positive Index of confusion matrix*/
 constexpr int TPI = 3;
+
+template <int x_axis_, int y_axis_>
+struct AxisConfig {
+    static constexpr int x_axis = x_axis_;
+    static constexpr int y_axis = y_axis_;
+};
+
+using PrecConfig = AxisConfig<FPI, TPI>;
+using RecConfig = AxisConfig<FNI, TPI>;
+
 /**
  * \Brief fill value for the chi2 scores, this values results p-values very
  * close to 1 chi2.ppf(1.-1e-14) --> 64.47398179869367
